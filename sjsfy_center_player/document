@@ -1,0 +1,21 @@
+VLC play 安装现在地址
+http://download.videolan.org/pub/videolan/vlc/
+此次开发版本是2.2.0
+VLCJ使用3.8.0
+
+#重要 2016-12-04 17:41:30
+系统启动的时候要配置
+-Djava.awt.headless=false
+
+#刻录状态
+1 - 刻录程程
+-1 - 刻录失败
+2 - 开始刻录
+3 - 休庭刻录
+4 - 闭庭刻录
+5 - 刻录中
+
+
+# 重要 打包 spring的jar方式启动
+1、mvn clean package spring-boot:repackage
+2、java -Djava.awt.headless=false -jar target/sjsfy_center_player-1.0-SNAPSHOT.jar

@@ -1,0 +1,14 @@
+.idea
+sjsfy_center_player/.idea
+sjsfy_center_player/target
+sjsfy_center_player/sjsfy_center_player.iml
+sjsfy_center_player/sjsfy_center_player.ipr
+sjsfy_center_player/sjsfy_center_player.iws
+
+sjsfy_center_services/.idea
+sjsfy_center_services/sjsfy_center_services.iml
+
+sjsfy_center_services/kelu_job_center/target
+sjsfy_center_services/web_manage_center/target
+
+

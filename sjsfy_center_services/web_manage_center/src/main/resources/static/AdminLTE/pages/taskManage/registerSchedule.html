@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Data Table</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="../../plugins/datatables/dataTables.bootstrap.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
+</head>
+<body>
+<div>
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">注册调度</h3>
+        </div>
+      </div>
+      <!-- /.box -->
+      <div class="box-header">
+      <table>
+        <tr><label>模型ID</label>&nbsp;&nbsp;<input id="modelID"/></tr><br>
+        <tr><label>任务名</label>&nbsp;&nbsp;<input id="taskName"/></tr><br>
+        <tr><label>是否在线</label>&nbsp;<input id="isline"/></tr><br>
+        <tr><label>任务类型</label>&nbsp;<input id="tasktype"/></tr><br>
+        <tr><label>任务责任人</label><input id="taskor"/></tr><br>
+        <tr><label>任务备注</label>&nbsp;<input id="backnote"/></tr>
+      </table>
+      <form>
+        <h3 class="box-title">执行计划</h3>
+        <label>调度队列</label>
+        <label>运行时参数</label>
+        <label>超时时间</label>
+        <label>就绪时间</label>
+        <label>优先级</label>
+
+        <br><br>
+        <h3 class="box-title">上游依赖任务</h3>
+        <div>
+          <button type="button" class="btn" id="j-addsrc" onclick="getAllDataSrc()">
+            添加依赖
+          </button>
+        </div>
+
+        <!-- Modal HTML -->
+        <div id="addSrcsModal" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 id="srcTitle" class="modal-title">添加上游任务</h4>
+              </div>
+              <div class="modal-body">
+                <table class="table table-bordered " style="margin-top: 0px">
+                  <thead>
+                    <tr>
+                      <th>请输入任务名</th>
+                    </tr>
+                  </thead>
+                  <tbody id="all_src_list_table">
+                    <tr>
+                      <th><input id="dep"/></th>
+                    </tr>
+                    <br>
+                    <tr>
+                      <th><button type="button" class="btn" id="j-addsrc" onclick="subdep()">确定</button></th>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </form>
+        <button type="button" onclick="sub()" class="btn btn-default" data-dismiss="modal">提交</button>
+      </div>
+
+    </div>
+    <!-- /.col -->
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.3 -->
+<script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="../../bootstrap/js/bootstrap.min.js"></script>
+<!-- DataTables -->
+<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../plugins/datatables/dataTables.bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="../../plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="../../plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../../dist/js/demo.js"></script>
+<!-- page script -->
+<script>
+  $(function () {
+
+  });
+  function sub(){
+    var isline = $('#isline').val();
+    var taskor = $('#taskor').val();
+    $.ajax({
+      url:'/task/registeSchedule',
+      type:"get",
+      data:"isline="+isline+"&taskor=" + taskor,
+      success:function(resp){
+        if(resp.code == 1) { //调用服务失败
+          alert('失败!');
+          return;
+        } else {
+          window.location="/AdminLTE/pages/taskManage/taskList.html";
+          return;
+        }
+      }
+    })
+  }
+
+  function getAllDataSrc(){
+    $("#addSrcsModal").modal('show');
+  }
+
+  function subdep(){
+    var modelId = $('#modelID').val();
+    var parentTable = $('#parentTable').val();
+    $.ajax({
+      url:'/task/addDep',
+      type:"get",
+      data:"modelId="+modelId+"&parentTable="+parentTable,
+      success:function(resp){
+        if(resp.code == 1) { //调用服务失败
+          alert('失败!');
+          $("#addSrcsModal").modal('hide');
+          return;
+        }else{
+          alert('成功!');
+          $("#addSrcsModal").modal('hide');
+        }
+      }
+    })
+  }
+
+</script>
+</body>
+</html>

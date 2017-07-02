@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Data Table</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="../../plugins/datatables/dataTables.bootstrap.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
+</head>
+<body>
+<div class="wrapper">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">任务列表</h3>
+          <button type="button" onclick="tt()" class="btn btn-default" data-dismiss="modal">创建任务</button>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <table id="example2" class="table table-bordered table-hover">
+          </table>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+  </div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.3 -->
+<script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="../../bootstrap/js/bootstrap.min.js"></script>
+<!-- DataTables -->
+<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../plugins/datatables/dataTables.bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="../../plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="../../plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/app.min.js"></script>
+<script>
+  $(function () {
+
+    var data;
+    $.ajax({
+      async:false,
+      url:'/task/list',
+      type:'get',
+      dataType:'json',
+      success:function (json) {
+        if(json.code == 0){
+          data = json.data;
+
+          $('#example2').DataTable({
+            columns:[
+              {data:'modelId',title:'模型ID'},
+              {data:'modelName',title:'模型名称'},
+              {data:'modelStatus',title:'模型状态'},
+              {data:'taskType',title:'任务类型'},
+              {data:'taskType',title:'操作'}
+            ],
+            data:data,
+            paging:true,
+            pagingType: 'full_numbers',
+            pageLength: 10,
+            //scrollX:400,
+            jQueryUI:true,
+            lengthChange:true,
+            processing:true,
+            destroy:true,
+            "columnDefs":[
+              {
+                "targets":4,
+                "render": function ( data, type, row ) {
+                  if(data=='实时调度'){
+                    return "<a href='javascript:void(0)' onclick='mm()'>单次执行</a>";
+                  }else{
+                    return "<a href='javascript:void(0)' onclick='ss()'>注册调度</a>";
+                  }
+
+                }
+              }
+            ]
+          });
+
+        }
+      }
+    });
+
+  });
+  function mm(){
+    $.ajax({
+      url:'/task/kitDrun',
+      type:"get",
+      data:"modelId=",
+      success:function(resp){
+        if(resp.code == 1) { //调用服务失败
+          alert('失败!');
+          return;
+        }else{
+          alert('成功!');
+
+        }
+      }
+    })
+  };
+  function tt(){
+    window.location="/AdminLTE/pages/taskManage/newTask.html";
+  };
+  function ss(){
+
+    window.location="/AdminLTE/pages/taskManage/registerSchedule.html";
+  };
+</script>
+</body>
+</html>
+
+
